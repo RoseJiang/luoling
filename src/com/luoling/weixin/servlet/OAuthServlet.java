@@ -6,10 +6,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.luoling.weixin.pojo.SNSUserInfo;
 import com.luoling.weixin.pojo.WeixinOauth2Token;
 import com.luoling.weixin.thread.TokenThread;
 import com.luoling.weixin.util.AdvancedUtil;
+import com.luoling.weixin.util.WeixinUtil;
 
 /**
  * 类名: OAuthServlet </br>
@@ -17,11 +21,15 @@ import com.luoling.weixin.util.AdvancedUtil;
  * 发布版本：V1.0 </br>
  */
 public class OAuthServlet extends HttpServlet {
+	
+	private static Logger log = LoggerFactory.getLogger(OAuthServlet.class);
 	private static final long serialVersionUID = -1847238807216447030L;
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		log.debug("com.luoling.weixin.servlet.OAuthServlet");
 		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
+		
 
 		// 用户同意授权后，能获取到code
 		String code = request.getParameter("code");
@@ -34,10 +42,13 @@ public class OAuthServlet extends HttpServlet {
 					TokenThread.appsecret, code);
 			// 网页授权接口访问凭证
 			String accessToken = weixinOauth2Token.getAccessToken();
+			log.debug("accessToken: " + accessToken);
 			// 用户标识
 			String openId = weixinOauth2Token.getOpenId();
+			log.debug("openId: " + openId);
 			// 获取用户信息
 			SNSUserInfo snsUserInfo = AdvancedUtil.getSNSUserInfo(accessToken, openId);
+			log.debug("snsUserInfo: " + snsUserInfo);
 
 			// 设置要传递的参数
 			request.setAttribute("snsUserInfo", snsUserInfo);

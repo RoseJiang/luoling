@@ -8,6 +8,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.luoling.weixin.service.CoreService;
 import com.luoling.weixin.util.SignUtil;
 
@@ -18,6 +21,7 @@ import com.luoling.weixin.util.SignUtil;
  */
 public class CoreServlet extends HttpServlet {
 
+	private static Logger log = LoggerFactory.getLogger(OAuthServlet.class);
     private static final long serialVersionUID = 4323197796926899691L;
 
     /**
@@ -25,7 +29,8 @@ public class CoreServlet extends HttpServlet {
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    	System.out.println("CoreServlet");
+    	
+    	log.debug("com.luoling.weixin.servlet.CoreServlet");
         
         // 微信加密签名
         String signature = request.getParameter("signature");
@@ -40,6 +45,7 @@ public class CoreServlet extends HttpServlet {
         
         // 通过检验signature对请求进行校验，若校验成功则原样返回echostr，表示接入成功，否则接入失败
         if (SignUtil.checkSignature(signature, timestamp, nonce)) {
+        	log.debug("Pass Check!");
             out.print(echostr);
         }
         

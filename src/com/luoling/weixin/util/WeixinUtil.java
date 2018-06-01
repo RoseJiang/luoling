@@ -36,7 +36,7 @@ import com.luoling.weixin.thread.TokenThread;
 * 发布版本：V1.0  </br>
  */
 public class WeixinUtil {
-private static Logger log = LoggerFactory.getLogger(WeixinUtil.class);
+	private static Logger log = LoggerFactory.getLogger(WeixinUtil.class);
     
     // 获取access_token的接口地址（GET） 限200（次/天）
     public final static String access_token_url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
@@ -172,8 +172,8 @@ private static Logger log = LoggerFactory.getLogger(WeixinUtil.class);
     public static Map<String, Object> getWxConfig(HttpServletRequest request) {
         Map<String, Object> ret = new HashMap<String, Object>();
       
-        String appId = TokenThread.appid; // 必填，公众号的唯一标识
-        String secret = TokenThread.appsecret;
+        String appId = "wxd7974569a04b8743"; // 必填，公众号的唯一标识
+        String secret = "da98549a1560dee22980ebfb06e96044";
 
         String requestUrl = request.getRequestURL().toString();
         String access_token = "";

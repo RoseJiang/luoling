@@ -20,6 +20,7 @@ public class InitServlet extends HttpServlet{
 
     public void init() throws ServletException {
         // 获取web.xml中配置的参数
+    	log.info("   InitServlet  init");
         TokenThread.appid = getInitParameter("appid");
         TokenThread.appsecret = getInitParameter("appsecret");
 
