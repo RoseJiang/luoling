@@ -30,16 +30,25 @@ public class AdvancedUtil {
         requestUrl = requestUrl.replace("APPID", appId);
         requestUrl = requestUrl.replace("SECRET", appSecret);
         requestUrl = requestUrl.replace("CODE", code);
+        log.info("com.luoling.weixin.util.AdvancedUtil#getOauth2AccessToken APPID: " + appId);
+        log.info("com.luoling.weixin.util.AdvancedUtil#getOauth2AccessToken SECRET: " + appSecret);
+        log.info("com.luoling.weixin.util.AdvancedUtil#getOauth2AccessToken CODE: " + code);
         // 获取网页授权凭证
         JSONObject jsonObject = CommonUtil.httpsRequest(requestUrl, "GET", null);
+        log.info("com.luoling.weixin.util.AdvancedUtil#getOauth2AccessToken jsonObject: " + jsonObject);
         if (null != jsonObject) {
             try {
                 wat = new WeixinOauth2Token();
                 wat.setAccessToken(jsonObject.getString("access_token"));
+                log.info("com.luoling.weixin.util.AdvancedUtil#getOauth2AccessToken access_token: " + jsonObject.getString("access_token"));
                 wat.setExpiresIn(jsonObject.getInt("expires_in"));
+                log.info("com.luoling.weixin.util.AdvancedUtil#getOauth2AccessToken expires_in: " + jsonObject.getInt("expires_in"));
                 wat.setRefreshToken(jsonObject.getString("refresh_token"));
+                log.info("com.luoling.weixin.util.AdvancedUtil#getOauth2AccessToken refresh_token: " + jsonObject.getString("refresh_token"));
                 wat.setOpenId(jsonObject.getString("openid"));
+                log.info("com.luoling.weixin.util.AdvancedUtil#getOauth2AccessToken openid: " + jsonObject.getString("openid"));
                 wat.setScope(jsonObject.getString("scope"));
+                log.info("com.luoling.weixin.util.AdvancedUtil#getOauth2AccessToken scope: " + jsonObject.getString("scope"));
             } catch (Exception e) {
                 wat = null;
                 int errorCode = jsonObject.getInt("errcode");

@@ -55,6 +55,7 @@ public class CommonUtil {
 			SSLSocketFactory ssf = sslContext.getSocketFactory();
 
 			URL url = new URL(requestUrl);
+			log.info("com.luoling.weixin.util.CommonUtil#httpsRequest  url: " + url);
 			HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
 			conn.setSSLSocketFactory(ssf);
 
@@ -89,11 +90,13 @@ public class CommonUtil {
 			inputStream = null;
 			conn.disconnect();
 			jsonObject = JSONObject.fromObject(buffer.toString());
+			log.info("inner try jsonObject: " + jsonObject);
 		} catch (ConnectException ce) {
 			log.error("连接超时：{}", ce);
 		} catch (Exception e) {
 			log.error("https请求异常：{}", e);
 		}
+		log.info("jsonObject: " + jsonObject);
 		return jsonObject;
 	}
 
