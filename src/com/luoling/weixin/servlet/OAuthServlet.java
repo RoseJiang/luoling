@@ -41,7 +41,6 @@ public class OAuthServlet extends HttpServlet {
 		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
 		HttpSession session = request.getSession();
-		String access_tokenValue = (String) session.getAttribute("access_token");
 
 		// 用户同意授权后，能获取到code
 		String code = request.getParameter("code");
@@ -67,6 +66,7 @@ public class OAuthServlet extends HttpServlet {
 			// 设置要传递的参数
 			request.setAttribute("snsUserInfo", snsUserInfo);
 			request.setAttribute("state", state);
+			log.info("OAuthServlet#doGet snsUserInfo: " + snsUserInfo);
 		}
 		
 		log.info("OAuthServlet#doGet accessToken: " + accessToken);
@@ -88,13 +88,13 @@ public class OAuthServlet extends HttpServlet {
 			SNSUserInfoUtil.saveSNSUser(snsUserInfo);
 		}
 		// 跳转到index.jsp
-		//request.getRequestDispatcher("index.jsp").forward(request, response);
+		request.getRequestDispatcher("index.jsp").forward(request, response);
 		log.info("OAuthServlet#doGet Subscribe: " + user.getSubscribe());
-		if(1 == user.getSubscribe()) {
-			request.getRequestDispatcher("member/membercenter.html").forward(request, response);
-		} else {
-			request.getRequestDispatcher("member/register.html").forward(request, response);
-		}
-		
+//		if(1 == user.getSubscribe()) {
+//			request.getRequestDispatcher("member/membercenter.html").forward(request, response);
+//		} else {
+//			request.getRequestDispatcher("member/register.html").forward(request, response);
+//		}
+//		
 	}
 }

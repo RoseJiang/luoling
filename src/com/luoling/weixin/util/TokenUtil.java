@@ -63,14 +63,21 @@ public class TokenUtil {
 	    	WeixinOauth2Token weixinOauth2Token = (WeixinOauth2Token) session.getAttribute("access_token");
 	    	String access_tokenValue = weixinOauth2Token == null? null : weixinOauth2Token.getAccessToken();
 	    	
-	    	if(null == access_tokenValue || ((null != access_tokenValue) && (TokenUtil.isExpired(weixinOauth2Token.getAccessToken())))) {
+	    	if(null == access_tokenValue) {
 				weixinOauth2Token = AdvancedUtil.getOauth2AccessToken(TokenThread.appid,
 						TokenThread.appsecret, code);
 				TokenUtil.saveToken(new Token(weixinOauth2Token.getAccessToken(), 7200));
 				session.setAttribute("access_token", weixinOauth2Token);
 			} else {
+				if(TokenUtil.isExpired(weixinOauth2Token.getAccessToken())) {
+					weixinOauth2Token = AdvancedUtil.getOauth2AccessToken(TokenThread.appid,
+							TokenThread.appsecret, code);
+					TokenUtil.updateToken("access_token", weixinOauth2Token.getAccessToken());
+					session.setAttribute("access_token", weixinOauth2Token);
+				}
 				weixinOauth2Token = (WeixinOauth2Token) session.getAttribute("access_token");
 			}
+	    	
 	    	return weixinOauth2Token;
 	    }
 	    
