@@ -9,17 +9,20 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.luoling.weixin.pojo.SNSUserInfo;
+import com.luoling.weixin.pojo.Token;
 import com.luoling.weixin.pojo.WeixinOauth2Token;
 import com.luoling.weixin.pojo.WeixinUserInfo;
 import com.luoling.weixin.thread.TokenThread;
 import com.luoling.weixin.util.AdvancedUtil;
 import com.luoling.weixin.util.CommonUtil;
 import com.luoling.weixin.util.SNSUserInfoUtil;
+import com.luoling.weixin.util.TokenUtil;
 import com.luoling.weixin.util.WeixinUserInfoUtil;
 import com.luoling.weixin.util.WeixinUtil;
 
@@ -37,7 +40,8 @@ public class OAuthServlet extends HttpServlet {
 		log.debug("com.luoling.weixin.servlet.OAuthServlet");
 		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
-		
+		HttpSession session = request.getSession();
+		String access_tokenValue = (String) session.getAttribute("access_token");
 
 		// 用户同意授权后，能获取到code
 		String code = request.getParameter("code");
@@ -48,8 +52,8 @@ public class OAuthServlet extends HttpServlet {
 		SNSUserInfo snsUserInfo = null;
 		if (!"authdeny".equals(code)) {
 			// 获取网页授权access_token
-			WeixinOauth2Token weixinOauth2Token = AdvancedUtil.getOauth2AccessToken(TokenThread.appid,
-					TokenThread.appsecret, code);
+			WeixinOauth2Token weixinOauth2Token = TokenUtil.getToken(session, code);
+
 			// 网页授权接口访问凭证
 			accessToken = weixinOauth2Token.getAccessToken();
 			log.debug("OAuthServlet#doGet accessToken: " + accessToken);

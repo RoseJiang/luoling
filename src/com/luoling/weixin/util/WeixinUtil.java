@@ -76,7 +76,7 @@ public class WeixinUtil {
      * @param appid 凭证
      * @param appsecret 密钥
      * @return
-     */
+     
     public static AccessToken getAccessToken(String appid, String appsecret) {
         AccessToken accessToken = null;
 
@@ -95,7 +95,7 @@ public class WeixinUtil {
             }
         }
         return accessToken;
-    }
+    }*/
     
     
     /**

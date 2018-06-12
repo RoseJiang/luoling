@@ -21,6 +21,7 @@ import com.luoling.weixin.util.TokenUtil;
 
 public class TokenTest {
 
+	//通过微信服务器端
 	@Test
 	public void testGetToken1() throws Exception {
 		String tokenUrl = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + TokenThread.appid + "&secret=" + TokenThread.appsecret;
@@ -61,6 +62,7 @@ public class TokenTest {
 		System.out.println(buffer);
 	}
 
+	//微信后台
 	@Test
 	public void testGetToken2() {
 		Token token = CommonUtil.getToken("appID", "appsecret");
@@ -68,14 +70,15 @@ public class TokenTest {
 		System.out.println("expires_in:" + token.getExpiresIn());
 	}
 	
+	//数据库
 	@Test
     public void testGetToken3() {
-        Map<String, Object> token=TokenUtil.getToken();
+        /*Map<String, Object> token=TokenUtil.getToken();
         System.out.println(token.get("access_token"));
-        System.out.println(token.get("expires_in"));
+        System.out.println(token.get("expires_in"));*/
     }
     
-    
+    //发起GET请求获取凭证
     @Test
     public void testSaveToken4() {
         Token token=CommonUtil.getToken("appID", "appsecret");

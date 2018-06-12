@@ -9,8 +9,16 @@ public class Token {
     private String accessToken;
     // 凭证有效期，单位：秒
     private int expiresIn;
+     
+    public Token() {}
+    
+    public Token(String accessToken, int expiresIn) {
+		super();
+		this.accessToken = accessToken;
+		this.expiresIn = expiresIn;
+	}
 
-    public String getAccessToken() {
+	public String getAccessToken() {
         return accessToken;
     }
 

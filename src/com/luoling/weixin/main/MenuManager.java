@@ -19,24 +19,24 @@ public class MenuManager {
 	private static Logger log = LoggerFactory.getLogger(MenuManager.class);
 
     public static void main(String[] args) {
-        // 第三方用户唯一凭证
-        String appId = TokenThread.appid;
-        // 第三方用户唯一凭证密钥
-        String appSecret = TokenThread.appsecret;
-
-        // 调用接口获取access_token
-        AccessToken at = WeixinUtil.getAccessToken(appId, appSecret);
-
-        if (null != at) {
-            // 调用接口创建菜单
-            int result = WeixinUtil.createMenu(getMenu(), at.getToken());
-
-            // 判断菜单创建结果
-            if (0 == result)
-                log.info("菜单创建成功！");
-            else
-                log.info("菜单创建失败，错误码：" + result);
-        }
+//        // 第三方用户唯一凭证
+//        String appId = TokenThread.appid;
+//        // 第三方用户唯一凭证密钥
+//        String appSecret = TokenThread.appsecret;
+//
+//        // 调用接口获取access_token
+//        AccessToken at = WeixinUtil.getAccessToken(appId, appSecret);
+//
+//        if (null != at) {
+//            // 调用接口创建菜单
+//            int result = WeixinUtil.createMenu(getMenu(), at.getToken());
+//
+//            // 判断菜单创建结果
+//            if (0 == result)
+//                log.info("菜单创建成功！");
+//            else
+//                log.info("菜单创建失败，错误码：" + result);
+//        }
     }
 
     /**
