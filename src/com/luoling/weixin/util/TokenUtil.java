@@ -62,14 +62,23 @@ public class TokenUtil {
 	    public static WeixinOauth2Token getToken(HttpSession session, String code){ 
 	    	WeixinOauth2Token weixinOauth2Token = (WeixinOauth2Token) session.getAttribute("access_token");
 	    	String access_tokenValue = weixinOauth2Token == null? null : weixinOauth2Token.getAccessToken();
+	    	Map<String, Object> map = new HashMap<String, Object>();
+	    	String previousCreateTime = "";
+	    	map = getTokenDB();
+			previousCreateTime = (String) map.get("createtime");
 	    	
 	    	if(null == access_tokenValue) {
 				weixinOauth2Token = AdvancedUtil.getOauth2AccessToken(TokenThread.appid,
 						TokenThread.appsecret, code);
-				TokenUtil.saveToken(new Token(weixinOauth2Token.getAccessToken(), 7200));
+				if(null == previousCreateTime) {
+					TokenUtil.saveToken(new Token(weixinOauth2Token.getAccessToken(), 7200));
+				} else {
+					TokenUtil.updateToken("access_token", weixinOauth2Token.getAccessToken());
+				}
+				
 				session.setAttribute("access_token", weixinOauth2Token);
 			} else {
-				if(TokenUtil.isExpired(weixinOauth2Token.getAccessToken())) {
+				if(TokenUtil.isExpired(previousCreateTime)) {
 					weixinOauth2Token = AdvancedUtil.getOauth2AccessToken(TokenThread.appid,
 							TokenThread.appsecret, code);
 					TokenUtil.updateToken("access_token", weixinOauth2Token.getAccessToken());

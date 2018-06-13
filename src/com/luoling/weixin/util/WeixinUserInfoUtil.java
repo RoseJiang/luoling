@@ -56,16 +56,16 @@ public class WeixinUserInfoUtil {
 			stmt.setString(1, openid);
 			log.info(sql);
 			rs = stmt.executeQuery();
-			log.info("id: " + rs.getInt(1) 
-					+ ", openId: " + rs.getString(2) 
-					+ ", subscribe: " + rs.getInt(3)
-					+ ", subscribeTime: " + rs.getString(4)
-					+ ", nickname: " + rs.getString(5)
-					+ ", country: " + rs.getString(6)
-					+ ", province: " + rs.getString(7)
-					+ ", city: " + rs.getString(8)
-					+ ", language: " + rs.getString(9)
-					+ ", headImgUrl: " + rs.getString(10));
+//			log.info("id: " + rs.getInt(1) 
+//					+ ", openId: " + rs.getString(2) 
+//					+ ", subscribe: " + rs.getInt(3)
+//					+ ", subscribeTime: " + rs.getString(4)
+//					+ ", nickname: " + rs.getString(5)
+//					+ ", country: " + rs.getString(6)
+//					+ ", province: " + rs.getString(7)
+//					+ ", city: " + rs.getString(8)
+//					+ ", language: " + rs.getString(9)
+//					+ ", headImgUrl: " + rs.getString(10));
 			
 			if(rs.next()) {
 				flag = true;
@@ -83,18 +83,7 @@ public class WeixinUserInfoUtil {
 	}
 	
 	public static void main(String[]args) {
-		WeixinUserInfo user = new WeixinUserInfo();
-		user.setOpenId("3423423");
-		user.setSubscribe(1);
-		user.setSubscribeTime("2018-6-7");
-		user.setNickname("Rose");
-		user.setCountry("huzhou");
-		user.setProvince("zhejiang");
-		user.setCity("changxing");
-		user.setLanguage("zh");
-		user.setHeadImgUrl("../11.png");
-		saveWeixinUser(user);
-		//System.out.println(isExists("3423423"));
+		isExists("o-vTk1e8Lsb4r8Nz06ogjEqD9d38");
 	}
 	
 }

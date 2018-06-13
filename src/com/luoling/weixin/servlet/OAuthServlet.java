@@ -49,9 +49,10 @@ public class OAuthServlet extends HttpServlet {
 		// 用户同意授权
 		String accessToken = "";
 		SNSUserInfo snsUserInfo = null;
+		WeixinOauth2Token weixinOauth2Token = TokenUtil.getToken(session, code);
 		if (!"authdeny".equals(code)) {
 			// 获取网页授权access_token
-			WeixinOauth2Token weixinOauth2Token = TokenUtil.getToken(session, code);
+			
 
 			// 网页授权接口访问凭证
 			accessToken = weixinOauth2Token.getAccessToken();
@@ -71,7 +72,7 @@ public class OAuthServlet extends HttpServlet {
 		
 		log.info("OAuthServlet#doGet accessToken: " + accessToken);
 		log.info("OAuthServlet#doGet openid: " + snsUserInfo.getOpenId());
-		WeixinUserInfo user = CommonUtil.getUserInfo(accessToken, snsUserInfo.getOpenId());
+		WeixinUserInfo user = CommonUtil.getUserInfo(TokenThread.accessToken.getAccessToken(), snsUserInfo.getOpenId());
 		
 		log.info(user.toString());
 		if(!WeixinUserInfoUtil.isExists(user.getOpenId())) {
@@ -88,13 +89,13 @@ public class OAuthServlet extends HttpServlet {
 			SNSUserInfoUtil.saveSNSUser(snsUserInfo);
 		}
 		// 跳转到index.jsp
-		request.getRequestDispatcher("index.jsp").forward(request, response);
+		//request.getRequestDispatcher("index.jsp").forward(request, response);
 		log.info("OAuthServlet#doGet Subscribe: " + user.getSubscribe());
-//		if(1 == user.getSubscribe()) {
-//			request.getRequestDispatcher("member/membercenter.html").forward(request, response);
-//		} else {
-//			request.getRequestDispatcher("member/register.html").forward(request, response);
-//		}
-//		
+		if(1 == user.getSubscribe()) {
+			request.getRequestDispatcher("member/membercenter.html").forward(request, response);
+		} else {
+			request.getRequestDispatcher("member/register.html").forward(request, response);
+		}
+		
 	}
 }
