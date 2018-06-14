@@ -25,7 +25,12 @@ public class TokenThread implements Runnable{
                 accessToken = CommonUtil.getToken(appid, appsecret);
                 if (null != accessToken) {
                     //调用存储到数据库
-                    TokenUtil.saveToken(accessToken);
+                	if(!TokenUtil.isBaseAccessTokenExist()) {
+                		TokenUtil.saveToken2(accessToken);
+                	} else {
+                		TokenUtil.updateToken("jsapi_token", accessToken.getAccessToken());
+                	}
+                    
                     log.info("获取access_token成功，有效时长{}秒 token:{}", accessToken.getExpiresIn(), accessToken.getAccessToken());
                     // 休眠7000秒
                     Thread.sleep((accessToken.getExpiresIn() - 200)*1000);

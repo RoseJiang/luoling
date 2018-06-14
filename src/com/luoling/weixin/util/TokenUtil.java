@@ -59,34 +59,29 @@ public class TokenUtil {
 	        }
 	        return map;
 	    } */
-	    public static WeixinOauth2Token getToken(HttpSession session, String code){ 
-	    	WeixinOauth2Token weixinOauth2Token = (WeixinOauth2Token) session.getAttribute("access_token");
-	    	String access_tokenValue = weixinOauth2Token == null? null : weixinOauth2Token.getAccessToken();
-	    	Map<String, Object> map = new HashMap<String, Object>();
-	    	String previousCreateTime = "";
-	    	map = getTokenDB();
-			previousCreateTime = (String) map.get("createtime");
+	    public static WeixinOauth2Token getToken(String code, HttpSession session){ 
+	    	Map<String, Object> map = getTokenDB();
+	    	String previousCreateTime = (String) map.get("createtime");
+	    	log.info("com.luoling.weixin.util.TokenUtil#getToken   previousCreateTime: " + previousCreateTime);
+	    	WeixinOauth2Token weixinOauth2Token = null;
 	    	
-	    	if(null == access_tokenValue) {
-				weixinOauth2Token = AdvancedUtil.getOauth2AccessToken(TokenThread.appid,
+	    	if(null == previousCreateTime) {
+	    		weixinOauth2Token = AdvancedUtil.getOauth2AccessToken(TokenThread.appid,
 						TokenThread.appsecret, code);
-				if(null == previousCreateTime) {
-					TokenUtil.saveToken(new Token(weixinOauth2Token.getAccessToken(), 7200));
-				} else {
-					TokenUtil.updateToken("access_token", weixinOauth2Token.getAccessToken());
-				}
-				
-				session.setAttribute("access_token", weixinOauth2Token);
-			} else {
-				if(TokenUtil.isExpired(previousCreateTime)) {
+	    		TokenUtil.saveToken(new Token(weixinOauth2Token.getAccessToken(), 7200));
+	    	} else {
+	    		if(TokenUtil.isExpired(previousCreateTime)) {
 					weixinOauth2Token = AdvancedUtil.getOauth2AccessToken(TokenThread.appid,
 							TokenThread.appsecret, code);
 					TokenUtil.updateToken("access_token", weixinOauth2Token.getAccessToken());
-					session.setAttribute("access_token", weixinOauth2Token);
+				} else {
+					weixinOauth2Token = new WeixinOauth2Token();
+					weixinOauth2Token.setAccessToken((String) map.get("access_token"));
+					weixinOauth2Token.setOpenId((String) session.getAttribute("openid"));
 				}
-				weixinOauth2Token = (WeixinOauth2Token) session.getAttribute("access_token");
-			}
-	    	
+	    	}
+	    	session.setAttribute("openid", weixinOauth2Token.getOpenId());
+	    	log.info(weixinOauth2Token.toString());
 	    	return weixinOauth2Token;
 	    }
 	    
@@ -165,6 +160,60 @@ public class TokenUtil {
 	        }
 	    }
 	    
+	    //获取基本访问凭证
+	    public static void saveToken2(Token token){
+	        //存入数据库中
+	        Connection conn = null;  
+	        PreparedStatement pst = null;  
+	        try {  
+	            //创建数据库链接  
+	            conn = DBUtility.getConnection(); 
+	            //创建预处理器  
+	            pst = conn.prepareStatement("insert into luoling_token(identifier, identifiervalue,expires_in,createTime)values(?, ?,?,?)");  
+	             
+	            pst.setString(1, "jsapi_token");
+	            pst.setString(2, token.getAccessToken()); 
+	            pst.setInt(3, token.getExpiresIn());  
+	            //long now = new Date().getTime();  
+	            //pst.setTimestamp(3, new java.sql.Timestamp(now));  
+	            pst.setString(4, System.currentTimeMillis() + "");
+	            pst.execute();  
+	        } catch (SQLException ex) {  
+	            System.out.println("数据库操作异常：" + ex.getMessage());  
+	        } finally {   
+	            DBUtility.closeConnection(conn);
+	        }
+	    }
+	    
+	    //判断数据库是否存有基本访问凭证
+	    public static boolean isBaseAccessTokenExist() {
+	    	Connection con = null;
+	        PreparedStatement stmt = null;
+	        ResultSet rs = null;
+	    	String sql = "select * from luoling_token where identifier='jsapi_token'";
+	    	boolean flag = false;
+	    	try {
+		    	//创建数据库链接  
+	            con = DBUtility.getConnection();  
+	            //创建处理器  
+	            stmt = con.prepareStatement(sql); 
+	            //查询Token，读取1条记录  
+	            rs = stmt.executeQuery();
+	            if (rs.next()) {
+	            	flag = true;
+	            } else {
+	            	flag = false;
+	            }
+	    	} catch (SQLException ex) {  
+	            System.out.println("数据库操作异常：" + ex.getMessage()); 
+	            flag = false;
+	        } finally {  
+	            DBUtility.closeConnection(con);
+	        }
+	    	log.info("flag: " + flag);
+        	return flag;
+	    }
+	    
 	    public static void updateToken(String identifier, String access_token) {
 	    	Connection conn = null;  
 	        PreparedStatement pst = null;  
@@ -193,9 +242,10 @@ public class TokenUtil {
 	    	token.setExpiresIn(7200);
 	    	//saveToken(token);
 	    	//updateToken("access_token", "11111111111");
-	    	Map<String, Object> map = getTokenDB();
+	    	/*Map<String, Object> map = getTokenDB();
 	    	System.out.println(map.get("access_token"));
 	    	System.out.println(map.get("createtime"));
-	    	System.out.println(isExpired((String) map.get("createtime")));
+	    	System.out.println(isExpired((String) map.get("createtime")));*/
+	    	isBaseAccessTokenExist();
 	    }
 }

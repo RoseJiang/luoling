@@ -68,6 +68,8 @@ public class AdvancedUtil {
      */
     @SuppressWarnings( { "deprecation", "unchecked" })
     public static SNSUserInfo getSNSUserInfo(String accessToken, String openId) {
+    	log.info("com.luoling.weixin.util.AdvancedUtil#getSNSUserInfo accessToken: " + accessToken);
+    	log.info("com.luoling.weixin.util.AdvancedUtil#getSNSUserInfo openId: " + openId);
         SNSUserInfo snsUserInfo = null;
         // 拼接请求地址
         String requestUrl = "https://api.weixin.qq.com/sns/userinfo?access_token=ACCESS_TOKEN&openid=OPENID";

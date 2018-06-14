@@ -40,25 +40,25 @@ public class OAuthServlet extends HttpServlet {
 		log.debug("com.luoling.weixin.servlet.OAuthServlet");
 		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
-		HttpSession session = request.getSession();
 
 		// 用户同意授权后，能获取到code
 		String code = request.getParameter("code");
 		String state = request.getParameter("state");
+		
+		HttpSession session =  request.getSession();
 
 		// 用户同意授权
 		String accessToken = "";
 		SNSUserInfo snsUserInfo = null;
-		WeixinOauth2Token weixinOauth2Token = TokenUtil.getToken(session, code);
+		WeixinOauth2Token weixinOauth2Token = TokenUtil.getToken(code, session);
 		if (!"authdeny".equals(code)) {
 			// 获取网页授权access_token
-			
-
 			// 网页授权接口访问凭证
 			accessToken = weixinOauth2Token.getAccessToken();
 			log.debug("OAuthServlet#doGet accessToken: " + accessToken);
 			// 用户标识
-			String openId = weixinOauth2Token.getOpenId();
+			//String openId = weixinOauth2Token.getOpenId();
+			String openId = (String) session.getAttribute("openid");
 			log.debug("OAuthServlet#doGet openId: " + openId);
 			// 获取用户信息
 			snsUserInfo = AdvancedUtil.getSNSUserInfo(accessToken, openId);
@@ -86,6 +86,7 @@ public class OAuthServlet extends HttpServlet {
 		
 		log.info(snsUserInfo.toString());
 		if(!SNSUserInfoUtil.isExists(snsUserInfo.getOpenId())) {
+			log.info("Save SNSUserInfo");
 			SNSUserInfoUtil.saveSNSUser(snsUserInfo);
 		}
 		// 跳转到index.jsp

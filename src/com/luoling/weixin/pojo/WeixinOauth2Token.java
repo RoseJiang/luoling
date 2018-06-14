@@ -55,4 +55,11 @@ public class WeixinOauth2Token {
     public void setScope(String scope) {
         this.scope = scope;
     }
+
+	@Override
+	public String toString() {
+		return "WeixinOauth2Token [accessToken=" + accessToken + ", expiresIn=" + expiresIn + ", refreshToken="
+				+ refreshToken + ", openId=" + openId + ", scope=" + scope + "]";
+	}
+    
 }

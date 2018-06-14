@@ -44,6 +44,6 @@ CREATE TABLE luoling_snsuserinfo(
    province varchar(1024),
    city varchar(1024),
    headImgUrl varchar(1024),
-   privilegeList varchar(1024),
+   privilege varchar(1024),
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;

@@ -78,6 +78,7 @@ public class WeixinUserInfoUtil {
 		} finally {
 			DBUtility.closeConnection(con);
 		}
+		log.info("flag: " + flag);
 
         return flag;
 	}
