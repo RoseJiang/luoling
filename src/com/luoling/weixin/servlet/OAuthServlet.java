@@ -94,8 +94,9 @@ public class OAuthServlet extends HttpServlet {
 		log.info("OAuthServlet#doGet Subscribe: " + user.getSubscribe());
 		if(1 == user.getSubscribe()) {
 			request.getRequestDispatcher("member/membercenter.html").forward(request, response);
+			//request.getRequestDispatcher("member/register.html").forward(request, response);
 		} else {
-			request.getRequestDispatcher("member/register.html").forward(request, response);
+			request.getRequestDispatcher("member/qrcode.html").forward(request, response);
 		}
 		
 	}
